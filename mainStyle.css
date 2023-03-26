@@ -1,0 +1,146 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body{
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.container{
+    width: 30%;
+    height: 80%;
+    /* background-color: green; */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0px 20px 40px rgba(0, 0, 0, 0.25);
+}
+.headerContainer{
+    width: 100%;
+    height: 5%;
+    text-align: center;
+    /* background-color: pink; */
+    color: royalblue;
+    font-size: 28px;
+}
+.fieldContainer{
+    width: 100%;
+    height: 85%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+}
+.inputContainer{
+    width: 100%;
+    height: 15%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.inputContainer label{
+    font-size: 18px;
+    color: #898989;
+}
+.inputContainer input{
+    width: 100%;
+    height: 70%;
+    font-weight: bold;
+    letter-spacing: 1px;
+    font-size: 18px;
+    padding: 0px 10px;
+}
+.errMsg{
+    color: firebrick;
+    font-size: 16px;
+    visibility: hidden;
+}
+.submitBtn{
+    height: 7%;
+    width: 35%;
+    border: none;
+    outline: none;
+    border-radius: 10px;
+    font-size: 20px;
+    color: #efefef;
+    font-weight:bold;
+    letter-spacing: 2px;
+    background-color: royalblue;
+}
+
+.veil{
+    position: absolute;
+    top: -100%;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.25);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.confirmPanel{
+    width: 35%;
+    height: 55%;
+    position: relative;
+    background-color: #efefef;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+.closeVeil{
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    color: black;
+    font-size: 20px;
+    cursor: pointer;
+}
+.confirmHeader{
+    width: 100%;
+    height: 5%;
+    text-align: center;
+    color: royalblue;
+    font-size: 28px;
+}
+.confirmData{
+    width: 100%;
+    height: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+.confirmField{
+    width: 100%;
+    height: 12%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.confirmData span{
+    font-size: 18px;
+}
+
+.confirmBtn{
+    height: 7%;
+    width: 35%;
+    border: none;
+    outline: none;
+    border-radius: 10px;
+    font-size: 20px;
+    color: #efefef;
+    font-weight:bold;
+    letter-spacing: 2px;
+    background-color: royalblue;
+}

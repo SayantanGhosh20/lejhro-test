@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lejhro-eNach</title>
+    <link rel="stylesheet" href="./mainStyle.css">
+    <script src="https://www.paynimo.com/Paynimocheckout/client/lib/jquery.min.js" type="text/javascript"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="veil" id="veil">
+        <div class="confirmPanel">
+            <div class="closeVeil" id="closeVeil">X</div>
+            <div class="confirmHeader">Confirm data</div>
+            <div class="confirmData">
+                <div class="confirmField">
+                    <span>Name:</span>
+                    <span id="name"></span>
+                </div>
+                <div class="confirmField">
+                    <span>Id:</span>
+                    <span id="id"></span>
+                </div>
+                <div class="confirmField">
+                    <span>Amount:</span>
+                    <span id="amount"></span>
+                </div>
+                <div class="confirmField">
+                    <span>Frequency:</span>
+                    <span id="freq"></span>
+                </div>
+                <div class="confirmField">
+                    <span>Debit start date:</span>
+                    <span id="debitStartDate"></span>
+                </div>
+                <div class="confirmField">
+                    <span>Debit end date:</span>
+                    <span id="debitEndDate"></span>
+                </div>
+            </div>
+            <button class="confirmBtn" id="confirmBtn">Confirm</button>
+        </div>
+    </div>
+
+    <section class="container">
+        <div class="headerContainer">Lejhro-eNach</div>
+        <div class="fieldContainer">
+            <div class="inputContainer">
+                <label for="">Name</label>
+                <input type="text" id="cName" >
+                <div class="errMsg">Err msg</div>
+            </div>
+            <div class="inputContainer">
+                <label for="">Id</label>
+                <input type="text" id="cId" >
+                <div class="errMsg">Err msg</div>
+            </div>
+            <div class="inputContainer">
+                <label for="">maxAmount</label>
+                <input type="text" id="mAmount" >
+                <div class="errMsg">Err msg</div>
+            </div>
+            <div class="inputContainer">
+                <label for="">Frequency</label>
+                <input type="text" id="frequency" >
+                <div class="errMsg">Err msg</div>
+            </div>
+            <div class="inputContainer">
+                <label for="">Debit start date</label>
+                <input type="date" id="dStartDate">
+                <div class="errMsg">Err msg</div>
+            </div>
+            <div class="inputContainer">
+                <label for="">Debit end date</label>
+                <input type="date" id="dEndDate">
+                <div class="errMsg">Err msg</div>
+            </div>
+        </div>
+        <button class="submitBtn" id="submitBtn">Submit</button>
+    </section>
+
+    <script type="text/javascript" src="https://www.paynimo.com/Paynimocheckout/server/lib/checkout.js"></script>
+    <script>
+        let consumerName = document.getElementById('cName');
+        let consumerId = document.getElementById('cId');
+        let maxAmount = document.getElementById('mAmount');
+        let frequency = document.getElementById('frequency');
+        let debitStartDate = document.getElementById('dStartDate');
+        let debitEndDate = document.getElementById('dEndDate');
+
+        let submitBtn = document.getElementById('submitBtn');
+        let confirmBtn = document.getElementById('confirmBtn');
+
+        var configJson = {
+            'tarCall': false,
+            'features': {
+                'showPGResponseMsg': true,
+                'enableAbortResponse': true,
+                'enableNewWindowFlow': true,
+                'enableExpressPay':true,
+                'siDetailsAtMerchantEnd':true,   
+                'enableSI':true,
+            },
+            'consumerData': {
+                'deviceId': 'WEBSH2',
+                'token': '63e8ff918ef68075e20f78fe210574350a4e732c7666431526933938601a5493bf9ec6eb324bad8755d4820895e9cbcf76df7709c7a04e4fd0e1d98468058816',
+                'returnUrl': 'http://127.0.0.1:3000/response',
+                'responseHandler': handleResponse,
+                'paymentMode': 'netBanking',
+                'merchantLogoUrl': 'https://www.paynimo.com/CompanyDocs/company-logo-md.png',
+                'merchantId': 'T877420',
+                'currency': 'INR',
+                'consumerId': 'c964636',
+                'txnId': '14822975811',
+                'items': [{
+                    'itemId': 'First',
+                    'amount': '1',
+                    'comAmt': '0' 
+                }],
+                'customStyle': {
+                    'PRIMARY_COLOR_CODE': '#3977b7',
+                    'SECONDARY_COLOR_CODE': '#FFFFFF',
+                    'BUTTON_COLOR_CODE_1': '#1969bb',
+                    'BUTTON_COLOR_CODE_2': '#FFFFFF'
+                },
+               'accountType': 'Saving',
+             'debitStartDate': '10-07-2022',
+               'debitEndDate': '01-03-2047',
+              'maxAmount': '100',
+               'amountType': 'M',
+               'frequency': 'ADHO'
+            }
+        };
+
+        let closeVeil = document.getElementById('closeVeil');
+        closeVeil.addEventListener('click', (e)=>{
+            e.preventDefault();
+            veil.style.top = '-100%';
+            veil.style.left = '0';
+        })
+
+        submitBtn.addEventListener('click', (e)=>{
+            e.preventDefault();
+            
+            let veil = document.getElementById('veil');
+
+            let consumerNameValue = consumerName.value;
+            let consumerIdValue = consumerId.value;
+            let maxAmountValue = maxAmount.value;
+            let frequencyValue = frequency.value;
+            let debitStartDateValue = debitStartDate.value;
+            let debitEndDateValue = debitEndDate.value;
+
+            let inputStatus1 = inputCheck(consumerName, consumerNameValue);
+            let inputStatus2 = inputCheck(consumerId, consumerIdValue);
+            let inputStatus3 = inputCheck(maxAmount, maxAmountValue);
+            let inputStatus4 = inputCheck(frequency, frequencyValue);
+            let inputStatus5 = inputCheck(debitStartDate, debitStartDateValue);
+            let inputStatus6 = inputCheck(debitEndDate, debitEndDateValue);
+            
+            if(inputStatus1 && inputStatus2 && inputStatus3 && inputStatus4 && inputStatus5 && inputStatus6){
+
+                let nameElement = document.getElementById('name');
+                let idElement = document.getElementById('id');
+                let amountElement = document.getElementById('amount');
+                let frequencyElement = document.getElementById('freq');
+                let dStartElement = document.getElementById('debitStartDate');
+                let dEndElement = document.getElementById('debitEndDate');
+
+                nameElement.innerText = consumerNameValue;
+                idElement.innerText = consumerIdValue;
+                amountElement.innerText = maxAmountValue;
+                frequencyElement.innerText = frequencyValue;
+                dStartElement.innerText = debitStartDateValue;
+                dEndElement.innerText = debitEndDateValue;
+
+                veil.style.top = '0';
+                veil.style.left = '0';
+            }
+
+        })
+
+        confirmBtn.addEventListener('click', (e)=>{
+            e.preventDefault();
+
+            let consumerNameValue = consumerName.value;
+            let consumerIdValue = consumerId.value;
+            let maxAmountValue = maxAmount.value;
+            let frequencyValue = frequency.value;
+            let debitStartDateValue = debitStartDate.value;
+            let debitEndDateValue = debitEndDate.value;
+            
+            $.post(
+                "http://127.0.0.1:3000/genTxnId",
+                {
+                    consumerName : consumerNameValue,
+                    consumerId : consumerIdValue
+                },
+                function(result){
+                    // result contains txnId
+                    let merchantId = 'T877420';
+                    let txnId = result;
+                    let totalamount = '1'; 
+                    let amountType = 'M';
+
+                    let plainPass = merchantId + '|' + txnId + '|' + totalamount + '|' + '|' + consumerIdValue + '|' + '|' + '|' + debitStartDateValue + '|' + debitEndDateValue + '|' + maxAmountValue + '|' + amountType + '|' + frequencyValue + '|' + '|' + '|' + '|' + '|';
+
+                    $.post(
+                        "http://127.0.0.1:3000/genHash",
+                        {
+                            plainPass : plainPass
+                        },
+                        function(result){
+                            configJson.consumerData.token = result.toString();
+                            configJson.consumerData.consumerId = consumerIdValue.toString();
+                            configJson.consumerData.txnId = txnId.toString();
+                            configJson.consumerData.debitStartDate = debitStartDateValue.toString();
+                            configJson.consumerData.debitEndDate = debitEndDateValue.toString();
+                            configJson.consumerData.maxAmount = maxAmountValue.toString();
+                            configJson.consumerData.frequency = frequencyValue.toString();    
+                            $.post(
+                                "http://127.0.0.1:3000/request",
+                                {
+                                    data : JSON.stringify({
+                                        consumerName : consumerNameValue,
+                                        customerId : consumerIdValue.toString(),
+                                        txnId : txnId.toString(),
+                                        amount : maxAmountValue.toString(),
+                                        frequency : frequencyValue.toString(),
+                                        debitStartDate : debitStartDateValue.toString(),
+                                        debitEndDate : debitEndDateValue.toString()
+                                    })
+                                },
+                                function(result){
+                                    $.pnCheckout(configJson);
+                                    if(configJson.features.enableNewWindowFlow){
+                                        pnCheckoutShared.openNewWindow();
+                                    }
+                                }
+                            )                          
+                        }
+                    )
+                }
+            )
+
+        })
+
+
+
+        function handleResponse(){
+
+        }
+
+        function inputCheck(element, value){
+            let errElement = element.nextElementSibling;
+
+            if(value.length == 0){
+                errElement.innerText = 'field cannot be empty';
+                errElement.style.visibility = 'visible';
+                errElement.style.color = 'firebrick';
+                console.log(errElement);
+                return 0;
+            }
+            else{
+                errElement.innerText = 'Err msg';
+                errElement.style.visibility = 'hidden';
+                return 1;
+            }
+        }
+    </script>
+</body>
+</html>
